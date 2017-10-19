@@ -1,0 +1,21 @@
+body {
+    margin-right: 25px;
+    margin-left: 25px;
+}
+
+.jumbotron{
+	background-color: grey;
+    color: white;
+}
+
+form {
+    margin: 15px;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+tr {
+	border: none;
+}

@@ -19,42 +19,44 @@
     
 <div class="container">
     <div class="panel panel-primary">
-        <div class="panel-heading"><b>Current Employees</b></div>
+        <div class="panel-heading"><b>Current Trains</b></div>
         <div class="row text-center">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <td>Train Name</td>
-                        <td>Destination</td>
-                        <td>Frequency(min)</td>
-                        <td>Next Arrival</td>
-                        <td>Minutes Away</td>
-                    </tr>
-                </thead>
-                <tbody id="trainPit">
+            <div class="col-lg-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td><b>Train Name</b></td>
+                            <td><b>Destination</b></td>
+                            <td><b>Frequency (minutes)</b></td>
+                            <td><b>Next Arrival</b></td>
+                            <td><b>Minutes Away</b></td>
+                        </tr>
+                    </thead>
+                    <tbody id="trainPit">
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
    <div class="container">
         <div class="panel panel-primary">
-            <div class="panel-heading"><b>Add Train</b></div>
+            <div class="panel-heading"><b>Add a Train</b></div>
             <form class="form-group">
                 <label>Train Name</label><br>
                 <input class="form-control" id="user-train" type="text" name="name"><br>
                 <label>Destination</label><br>
                 <input class="form-control" id="user-destination" type="text" name=""><br>
-                <label>Frequency(min)</label><br>
+                <label>Frequency (minutes)</label><br>
                 <input class="form-control" id="user-frequency" type="text" name=""><br>
-                <label>Next Arrival</label><br>
+                <label>Next Arrival Time</label><br>
                 <input class="form-control" id="user-next" type="text" name=""><br>
                 <label>Minutes Away</label><br>
                 <input class="form-control" id="user-minutes-away" type="text" name=""><br>
                 <input class="btn btn-primary" id="submit-button" type="submit" name="submit" value="submit">
-                <input class="btn btn-primary" type="submit" name="class" value="clear">
+                <input class="btn btn-primary" type="reset" name="class" value="Clear">
 
             </form>
         </div>
