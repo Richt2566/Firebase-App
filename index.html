@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Train Schedule</title>
+
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  </head>
+  <body>
+    
+    <div class="jumbotron text-center"> 
+        <h1>Train schedules</h1>
+    </div>
+    
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading"><b>Current Employees</b></div>
+        <div class="row text-center">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>Train Name</td>
+                        <td>Destination</td>
+                        <td>Frequency(min)</td>
+                        <td>Next Arrival</td>
+                        <td>Minutes Away</td>
+                    </tr>
+                </thead>
+                <tbody id="trainPit">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+   <div class="container">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><b>Add Train</b></div>
+            <form class="form-group">
+                <label>Train Name</label><br>
+                <input class="form-control" id="user-train" type="text" name="name"><br>
+                <label>Destination</label><br>
+                <input class="form-control" id="user-destination" type="text" name=""><br>
+                <label>Frequency(min)</label><br>
+                <input class="form-control" id="user-frequency" type="text" name=""><br>
+                <label>Next Arrival</label><br>
+                <input class="form-control" id="user-next" type="text" name=""><br>
+                <label>Minutes Away</label><br>
+                <input class="form-control" id="user-minutes-away" type="text" name=""><br>
+                <input class="btn btn-primary" id="submit-button" type="submit" name="submit" value="submit">
+                <input class="btn btn-primary" type="submit" name="class" value="clear">
+
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.5.2/firebase.js"></script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="assets/javascript/main.js"></script>
+  </body>
+</html>
