@@ -46,35 +46,36 @@ $("#submit-button").on("click", function(event){
   $("#user-next").val("");
   $("#user-minutes-away").val("");
 
-  // create variable for the HTML to show up
-  var row = $("<tr></tr>");
-
-    //all of the different train qualities need to be appended
-    row.append($("<td>" + train + "</td>"));
-    row.append($("<td>" + destination + "</td>"));
-    row.append($("<td>" + frequency + "</td>"));
-    row.append($("<td>" + nextArrival + "</td>"));
-    row.append($("<td>" + minutesAway + "</td>"));
-
-    //now append the whole row to the table
-  $("#trainPit").append(row);
     
   });
 
 //every time the database updates, so does the HTML
-database.ref().on("child_added", function(update){
+database.ref().on("child_added", function(update, prevChildKey){
 
-  var train = update.val().trainname;
-  var destination = update.val().traindestination;
-  var frequency = update.val().trainfrequency;
-  var nextArrival = update.val().nextarrival;
-  var minutesAway = update.val().minutesAway;
+var train = update.val().trainname;
+var destination = update.val().traindestination;
+var frequency = update.val().trainfrequency;
+var nextArrival = update.val().nextarrival;
+var minutesAway = update.val().minutesaway;
 
   	// console.log(update.val().trainname);
    //  console.log(update.val().traindestination);
    //  console.log(update.val().trainfrequency);
    //  console.log(update.val().nextarrival);
    //  console.log(update.val().minutesaway);
+
+       // create variable for the HTML to show up
+  var row = $("<tr></tr>");
+
+    //all of the different train qualities need to be appended
+    row.append($("<td>" + train + "</td>"));
+    row.append($("<td>" + update.val().traindestination + "</td>"));
+    row.append($("<td>" + update.val().trainfrequency + "</td>"));
+    row.append($("<td>" + update.val().nextarrival + "</td>"));
+    row.append($("<td>" + update.val().minutesaway + "</td>"));
+
+    //now append the whole row to the table
+  $("#trainPit").append(row);
 
   	}, function(errorObject) {
   		console.log("The read failed: " + errorObject.code);
