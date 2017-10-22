@@ -14,23 +14,50 @@ var database = firebase.database();
 
 // on click this function does the bulk of the work
 $("#submit-button").on("click", function(event){
+
+  //console.log(event);
     // prevents the page from reloading?
     event.preventDefault();
 
   //setting variables to equal whatever the user puts in the form
   var train = $("#user-train").val().trim();
   var destination = $("#user-destination").val().trim();
+  //var frequency = $("#user-frequency").val().trim();
+  //var nextArrival = moment(currentTime, "hh:mm");// first train time + frequency
+  //var minutesAway = // first train time + frequency - current time.
+
+  //console.log(frequency);
+
   var frequency = $("#user-frequency").val().trim();
-  var nextArrival = $("#user-next").val().trim();
-  var minutesAway = $("#user-minutes-away").val().trim();
+console.log(frequency);
+
+var currentTime = parseInt(moment().format("HH:mm"));
+console.log(currentTime);
+
+var firstTime = parseInt($("#user-first").val().trim());
+console.log(firstTime);
+
+    // Difference between the times
+var diffTime = parseInt(currentTime - firstTime);
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+var tRemainder = diffTime % frequency;
+    console.log(tRemainder);
+
+    // Minute Until Train
+var tMinutesTillTrain = frequency - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+    // Next Train
+var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
 
   //each new submission creates an object with these qualities
   var newTrain = {
     trainname: train,
     traindestination: destination,
-    trainfrequency: frequency,
-    nextarrival: nextArrival,
-    minutesaway: minutesAway
+    trainfrequency: frequency
   };
 
   //pushing the new data from the object
@@ -43,8 +70,8 @@ $("#submit-button").on("click", function(event){
   $("#user-train").val("");
   $("#user-destination").val("");
   $("#user-frequency").val("");
-  $("#user-next").val("");
-  $("#user-minutes-away").val("");
+  $("#user-first").val("");
+  //$("#user-minutes-away").val("");
 
     
   });
@@ -52,27 +79,49 @@ $("#submit-button").on("click", function(event){
 //every time the database updates, so does the HTML
 database.ref().on("child_added", function(update, prevChildKey){
 
+  //console.log(update);
+  //console.log(prevChildKey);
+
 var train = update.val().trainname;
 var destination = update.val().traindestination;
 var frequency = update.val().trainfrequency;
-var nextArrival = update.val().nextarrival;
-var minutesAway = update.val().minutesaway;
+//var nextArrival = // already established
+//var minutesAway = // already established
 
-  	// console.log(update.val().trainname);
-   //  console.log(update.val().traindestination);
-   //  console.log(update.val().trainfrequency);
-   //  console.log(update.val().nextarrival);
-   //  console.log(update.val().minutesaway);
+  var frequency = $("#user-frequency").val().trim();
+//console.log(frequency);
 
-       // create variable for the HTML to show up
+var currentTime = parseInt(moment().format("HH:mm"));
+//console.log(currentTime);
+
+var firstTime = parseInt($("#user-first").val().trim());
+//console.log(firstTime);
+
+    // Difference between the times
+var diffTime = parseInt(currentTime - firstTime);
+    //console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+var tRemainder = diffTime % frequency;
+    //console.log(tRemainder);
+
+    // Minute Until Train
+var tMinutesTillTrain = frequency - tRemainder;
+    //console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+    // Next Train
+var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    //console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+
+  // create variable for the HTML to show up
   var row = $("<tr></tr>");
 
     //all of the different train qualities need to be appended
     row.append($("<td>" + train + "</td>"));
-    row.append($("<td>" + update.val().traindestination + "</td>"));
-    row.append($("<td>" + update.val().trainfrequency + "</td>"));
-    row.append($("<td>" + update.val().nextarrival + "</td>"));
-    row.append($("<td>" + update.val().minutesaway + "</td>"));
+    row.append($("<td>" + destination + "</td>"));
+    row.append($("<td>" + frequency + "</td>"));
+    row.append($("<td>" + nextTrain.format("HH:mm:ss a") + "</td>"));
+    row.append($("<td>" + tMinutesTillTrain + "</td>"));
 
     //now append the whole row to the table
   $("#trainPit").append(row);
