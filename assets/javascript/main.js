@@ -15,49 +15,30 @@ var database = firebase.database();
 // on click this function does the bulk of the work
 $("#submit-button").on("click", function(event){
 
-  //console.log(event);
-    // prevents the page from reloading?
-    event.preventDefault();
+  // prevents the page from reloading?
+  event.preventDefault();
 
   //setting variables to equal whatever the user puts in the form
   var train = $("#user-train").val().trim();
   var destination = $("#user-destination").val().trim();
-  //var frequency = $("#user-frequency").val().trim();
-  //var nextArrival = moment(currentTime, "hh:mm");// first train time + frequency
-  //var minutesAway = // first train time + frequency - current time.
-
-  //console.log(frequency);
-
+  var firstTime = moment($('#user-first').val().trim(), "HH:mm").format("");
   var frequency = $("#user-frequency").val().trim();
-console.log(frequency);
 
-var currentTime = parseInt(moment().format("HH:mm"));
-console.log(currentTime);
-
-var firstTime = parseInt($("#user-first").val().trim());
-console.log(firstTime);
-
-    // Difference between the times
-var diffTime = parseInt(currentTime - firstTime);
-    console.log("DIFFERENCE IN TIME: " + diffTime);
-
-    // Time apart (remainder)
-var tRemainder = diffTime % frequency;
-    console.log(tRemainder);
-
-    // Minute Until Train
-var tMinutesTillTrain = frequency - tRemainder;
-    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
-
-    // Next Train
-var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+  var currentTime = moment();
+  var firstTime = parseInt($("#user-first").val().trim());
+  var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
+  var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+  var tRemainder = diffTime % frequency;
+  var tMinutesTillTrain = frequency - tRemainder;
+  var nextTrain = moment().add(tMinutesTillTrain, "minutes");
 
   //each new submission creates an object with these qualities
   var newTrain = {
     trainname: train,
     traindestination: destination,
-    trainfrequency: frequency
+    firsttrain: firstTime,
+    trainfrequency: frequency,
+    minutesaway: tMinutesTillTrain
   };
 
   //pushing the new data from the object
@@ -71,47 +52,31 @@ var nextTrain = moment().add(tMinutesTillTrain, "minutes");
   $("#user-destination").val("");
   $("#user-frequency").val("");
   $("#user-first").val("");
-  //$("#user-minutes-away").val("");
-
-    
   });
 
 //every time the database updates, so does the HTML
 database.ref().on("child_added", function(update, prevChildKey){
 
-  //console.log(update);
-  //console.log(prevChildKey);
+  var train = update.val().trainname;
 
-var train = update.val().trainname;
-var destination = update.val().traindestination;
-var frequency = update.val().trainfrequency;
-//var nextArrival = // already established
-//var minutesAway = // already established
+  var destination = update.val().traindestination;
 
-  var frequency = $("#user-frequency").val().trim();
-//console.log(frequency);
+  var frequency = update.val().trainfrequency;
 
-var currentTime = parseInt(moment().format("HH:mm"));
-//console.log(currentTime);
+  // this is where the calc starts...
+  var currentTime = moment();
 
-var firstTime = parseInt($("#user-first").val().trim());
-//console.log(firstTime);
+  var firstTime = parseInt($("#user-first").val().trim());
 
-    // Difference between the times
-var diffTime = parseInt(currentTime - firstTime);
-    //console.log("DIFFERENCE IN TIME: " + diffTime);
+  var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
 
-    // Time apart (remainder)
-var tRemainder = diffTime % frequency;
-    //console.log(tRemainder);
+  var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
 
-    // Minute Until Train
-var tMinutesTillTrain = frequency - tRemainder;
-    //console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+  var tRemainder = diffTime % frequency;
 
-    // Next Train
-var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-    //console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+  var tMinutesTillTrain = frequency - tRemainder;
+  
+  var nextTrain = moment().add(tMinutesTillTrain, "minutes");
 
   // create variable for the HTML to show up
   var row = $("<tr></tr>");
@@ -128,4 +93,4 @@ var nextTrain = moment().add(tMinutesTillTrain, "minutes");
 
   	}, function(errorObject) {
   		console.log("The read failed: " + errorObject.code);
-  });
+});
