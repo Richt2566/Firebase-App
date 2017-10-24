@@ -12,6 +12,8 @@ firebase.initializeApp(config);
 // set the datebase to firebase
 var database = firebase.database();
 
+//-----------------------------------------------------
+
 // on click this function does the bulk of the work
 $("#submit-button").on("click", function(event){
 
@@ -21,16 +23,10 @@ $("#submit-button").on("click", function(event){
   //setting variables to equal whatever the user puts in the form
   var train = $("#user-train").val().trim();
   var destination = $("#user-destination").val().trim();
-  var firstTime = moment($('#user-first').val().trim(), "HH:mm").format("");
+  var firstTime = $('#user-first').val().trim();
   var frequency = $("#user-frequency").val().trim();
 
-  var currentTime = moment();
-  var firstTime = parseInt($("#user-first").val().trim());
-  var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
-  var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-  var tRemainder = diffTime % frequency;
-  var tMinutesTillTrain = frequency - tRemainder;
-  var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+  //----------------------------------------------------
 
   //each new submission creates an object with these qualities
   var newTrain = {
@@ -38,14 +34,11 @@ $("#submit-button").on("click", function(event){
     traindestination: destination,
     firsttrain: firstTime,
     trainfrequency: frequency,
-    minutesaway: tMinutesTillTrain
+    //minutesaway: tMinutesTillTrain
   };
 
   //pushing the new data from the object
   database.ref().push(newTrain);
-
-  // I will change this later
-  alert("train added");
 
   //this clears the html in all fields
   $("#user-train").val("");
@@ -54,29 +47,38 @@ $("#submit-button").on("click", function(event){
   $("#user-first").val("");
   });
 
+//----------------------------------------------------------
+
 //every time the database updates, so does the HTML
 database.ref().on("child_added", function(update, prevChildKey){
 
   var train = update.val().trainname;
-
   var destination = update.val().traindestination;
-
   var frequency = update.val().trainfrequency;
+  var minutesaway = update.val().tMinutesTillTrain;
+  var firstTime = update.val().firsttrain;
 
-  // this is where the calc starts...
+  //this is where the calc starts...
+
+  // pushing back one year - not sure i understand this part...
+  var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
+
+  // current time is always updated
   var currentTime = moment();
 
-  var firstTime = parseInt($("#user-first").val().trim());
-
-  var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
-
+  // difference between users first time and now
   var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
 
+  // Time apart (remainder)
   var tRemainder = diffTime % frequency;
 
+  // minutes until train
   var tMinutesTillTrain = frequency - tRemainder;
-  
+
+  // next train arrival
   var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+
+  var formattedTrain = nextTrain.format("HH:mm:ss a")
 
   // create variable for the HTML to show up
   var row = $("<tr></tr>");
@@ -85,7 +87,7 @@ database.ref().on("child_added", function(update, prevChildKey){
     row.append($("<td>" + train + "</td>"));
     row.append($("<td>" + destination + "</td>"));
     row.append($("<td>" + frequency + "</td>"));
-    row.append($("<td>" + nextTrain.format("HH:mm:ss a") + "</td>"));
+    row.append($("<td>" + formattedTrain + "</td>"));
     row.append($("<td>" + tMinutesTillTrain + "</td>"));
 
     //now append the whole row to the table
